@@ -46,10 +46,8 @@ export default function TimeSchedule() {
   const [isSelecting, setIsSelecting] = useState(false);
   const [isShiftPressed, setIsShiftPressed] = useState(false);
 
-  // Time slots (0-23)
   const timeSlots = Array.from({ length: 24 }, (_, i) => i);
 
-  // Calculate hours based on slots
   const calculateHours = (slots: number[]) => {
     const workHours = slots.filter((slot) => slot === 1).length;
     const ncHours = slots.filter((slot) => slot === 2).length;
@@ -57,7 +55,6 @@ export default function TimeSchedule() {
     return { workHours, restHours, ncHours };
   };
 
-  // Update slots and recalculate hours
   const updateDaySlots = (dayIndex: number, newSlots: number[]) => {
     const updatedWeekData = [...weekData];
     updatedWeekData[dayIndex].slots = newSlots;
@@ -70,7 +67,6 @@ export default function TimeSchedule() {
     setWeekData(updatedWeekData);
   };
 
-  // Apply selected slot type to all selected slots
   const applySlotTypeToSelection = (slotType: number) => {
     if (expandedDay === null || selectedSlots.length === 0) return;
 
@@ -86,23 +82,18 @@ export default function TimeSchedule() {
     setSelectedSlots([]);
   };
 
-  // Handle slot selection
   const handleSlotClick = (slotIndex: number, isMouseDown = false) => {
     if (expandedDay === null) return;
 
     if (isMouseDown) {
       setIsSelecting(true);
       if (isShiftPressed && selectedSlots.length > 0) {
-        // Add to selection when shift is pressed
         if (selectedSlots.includes(slotIndex)) {
-          // If already selected, deselect it
           setSelectedSlots(selectedSlots.filter((slot) => slot !== slotIndex));
         } else {
-          // Add to multi-selection
           setSelectedSlots([...selectedSlots, slotIndex]);
         }
       } else {
-        // Start new selection
         setSelectedSlots([slotIndex]);
       }
     } else if (isSelecting) {
@@ -112,14 +103,12 @@ export default function TimeSchedule() {
     }
   };
 
-  // Handle mouse up to end selection
   const handleMouseUp = () => {
     if (isSelecting) {
       setIsSelecting(false);
     }
   };
 
-  // Handle day expansion
   const toggleDayExpansion = (day: number) => {
     if (expandedDay === day) {
       setExpandedDay(null);
@@ -130,7 +119,6 @@ export default function TimeSchedule() {
     }
   };
 
-  // Track shift key status
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Shift") {
@@ -164,7 +152,6 @@ export default function TimeSchedule() {
     };
   }, [isSelecting, selectedSlots]);
 
-  // Grid for hours at the top
   const HoursGrid = () => (
     <div className="flex gap-1">
       {timeSlots.map((hour) => (
@@ -232,7 +219,6 @@ export default function TimeSchedule() {
               </div>
             </div>
 
-            {/* Expanded edit view */}
             {expandedDay === day.day && (
               <div className="p-4 bg-gray-50 border-t">
                 <div className="mb-4 flex justify-between items-center">
